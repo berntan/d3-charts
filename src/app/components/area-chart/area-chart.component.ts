@@ -6,11 +6,12 @@ import * as d3 from 'd3';
   template: `<svg></svg>`,
 })
 export class AreaChartComponent implements OnInit, OnChanges {
+  @Input() data: number[] = [];
+
   @Input() transitionTime = 1000;
   @Input() xmax = 45;
   @Input() ymax = 200;
   @Input() hticks = 60;
-  @Input() data: number[];
   @Input() showLabel = 1;
   hostElement; // Native element hosting the SVG container
   svg; // Top level SVG element
