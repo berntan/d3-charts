@@ -10,12 +10,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AreaChartComponent } from './components/area-chart/area-chart.component';
 import { OrderDeliveryComponent } from './components/order-delivery/order-delivery.component';
+import { BrushAndZoomComponent } from './components/brush-and-zoom/brush-and-zoom.component';
+import { BrushAndZoomContainerComponent } from './components/brush-and-zoom-container/brush-and-zoom-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AreaChartComponent,
-    OrderDeliveryComponent
+    OrderDeliveryComponent,
+    BrushAndZoomComponent,
+    BrushAndZoomContainerComponent
   ],
   imports: [
     BrowserModule,
