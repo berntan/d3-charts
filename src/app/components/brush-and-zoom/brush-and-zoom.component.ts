@@ -91,12 +91,13 @@ export class BrushAndZoomComponent implements OnInit, OnChanges {
       .call(this.brush)
       .call(this.brush.move, this.x.range());
 
-    this.svg.append('rect')
-      .attr('class', 'zoom')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
-      .call(this.zoom);
+    // TODO: This covers up the area ...
+    // this.svg.append('rect')
+    //   .attr('class', 'zoom')
+    //   .attr('width', this.width)
+    //   .attr('height', this.height)
+    //   .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
+    //   .call(this.zoom);
   }
 
   private createChart() {
