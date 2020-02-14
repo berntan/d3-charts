@@ -11,8 +11,8 @@ import * as d3 from 'd3';
 export class BrushAndZoomComponent implements OnInit, OnChanges {
   @Input() data: string;
 
-  private hostElement; // Native element hosting the SVG container
-  private svg; // Top level SVG element
+  hostElement; // Native element hosting the SVG container
+  svg; // Top level SVG element
 
   margin;
   margin2;
@@ -20,82 +20,86 @@ export class BrushAndZoomComponent implements OnInit, OnChanges {
   height;
   height2;
 
-  private x: d3.ScaleTime<number, number>;
-  private x2: d3.ScaleTime<number, number>;
-  private y: d3.ScaleLinear<number, number>;
-  private y2: d3.ScaleLinear<number, number>;
-  private xAxis;   // d3.Axis<d3.AxisDomain>;
-  private xAxis2;  //  d3.Axis<d3.AxisDomain>;
-  private yAxis;   // d3.Axis<d3.AxisDomain>;
+  x: d3.ScaleTime<number, number>;
+  x2: d3.ScaleTime<number, number>;
+  y: d3.ScaleLinear<number, number>;
+  y2: d3.ScaleLinear<number, number>;
+  xAxis;   // d3.Axis<d3.AxisDomain>;
+  xAxis2;  //  d3.Axis<d3.AxisDomain>;
+  yAxis;   // d3.Axis<d3.AxisDomain>;
   focus: any;
-  private area: any;
-  private brush: d3.BrushBehavior<any>;
-  private area2: any;
-  private context: any;
-  private zoom: d3.ZoomBehavior<d3.ZoomedElementBaseType, unknown>;
+  area: any;
+  brush: d3.BrushBehavior<any>;
+  area2: any;
+  context: any;
+  zoom: d3.ZoomBehavior<d3.ZoomedElementBaseType, unknown>;
 
 
   constructor(private elRef: ElementRef) {
     this.hostElement = this.elRef.nativeElement;
   }
 
+  ngOnInit(): void {
+    // this.updateChart(changes.data.currentValue);
+    this.createChart();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data) {
-      const parsedArray = d3.csvParse(changes.data.currentValue, this.csvType);
-      console.log('parsedArray: ', JSON.stringify(parsedArray));
-
-      /*
-      function(error, data) {
-        if (error) throw error;
-
-        x.domain(d3.extent(data, function(d) { return d.date; }));
-        y.domain([0, d3.max(data, function(d) { return d.price; })]);
-        x2.domain(x.domain());
-        y2.domain(y.domain());
-
-        focus.append("path")
-          .datum(data)
-          .attr("class", "area")
-          .attr("d", area);
-
-        focus.append("g")
-          .attr("class", "axis axis--x")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-        focus.append("g")
-          .attr("class", "axis axis--y")
-          .call(yAxis);
-
-        context.append("path")
-          .datum(data)
-          .attr("class", "area")
-          .attr("d", area2);
-
-        context.append("g")
-          .attr("class", "axis axis--x")
-          .attr("transform", "translate(0," + height2 + ")")
-          .call(xAxis2);
-
-        context.append("g")
-          .attr("class", "brush")
-          .call(brush)
-          .call(brush.move, x.range());
-
-        svg.append("rect")
-          .attr("class", "zoom")
-          .attr("width", width)
-          .attr("height", height)
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-          .call(zoom);
-      });
-*/
+      if (!this.svg) {
+        this.createChart();
+      } else {
+        this.drawChart(changes.data.currentValue);
+      }
     }
   }
 
-  ngOnInit(): void {
-    // this.updateChart(changes.data.currentValue);
+  private drawChart(data: any) {
+    const parsedData = d3.csvParse(data, this.csvType);
 
+    this.x.domain(d3.extent(parsedData, (d) => d.date));
+    this.y.domain([ 0, d3.max(parsedData, (d) => d.price) ]);
+    this.x2.domain(this.x.domain());
+    this.y2.domain(this.y.domain());
+
+    this.focus.append('path')
+      .datum(parsedData)
+      .attr('class', 'area')
+      .attr('d', this.area);
+
+    this.focus.append('g')
+      .attr('class', 'axis axis--x')
+      .attr('transform', 'translate(0,' + this.height + ')')
+      .call(this.xAxis);
+
+    this.focus.append('g')
+      .attr('class', 'axis axis--y')
+      .call(this.yAxis);
+
+    this.context.append('path')
+      .datum(parsedData)
+      .attr('class', 'area')
+      .attr('d', this.area2);
+
+    this.context.append('g')
+      .attr('class', 'axis axis--x')
+      .attr('transform', 'translate(0,' + this.height2 + ')')
+      .call(this.xAxis2);
+
+    this.context.append('g')
+      .attr('class', 'brush')
+      .call(this.brush)
+      .call(this.brush.move, this.x.range());
+
+    this.svg.append('rect')
+      .attr('class', 'zoom')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
+      .call(this.zoom);
+  }
+
+  private createChart() {
     this.svg = d3.select(this.hostElement).select('svg');
 
     this.margin = { top: 20, right: 20, bottom: 110, left: 40 };
@@ -115,13 +119,13 @@ export class BrushAndZoomComponent implements OnInit, OnChanges {
 
     this.brush = d3.brushX()
       .extent([ [ 0, 0 ], [ this.width, this.height2 ] ])
-      .on('brush end', this.brushed);
+      .on('brush end', this.brushed.bind(this));
 
     this.zoom = d3.zoom()
       .scaleExtent([ 1, Infinity ])
       .translateExtent([ [ 0, 0 ], [ this.width, this.height ] ])
       .extent([ [ 0, 0 ], [ this.width, this.height ] ])
-      .on('zoom', this.zoomed);
+      .on('zoom', this.zoomed.bind(this));
 
     this.area = d3.area()
       .curve(d3.curveMonotoneX)
@@ -149,13 +153,10 @@ export class BrushAndZoomComponent implements OnInit, OnChanges {
     this.context = this.svg.append('g')
       .attr('class', 'context')
       .attr('transform', 'translate(' + this.margin2.left + ',' + this.margin2.top + ')');
-
   }
 
   brushed() {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') {
-      return;
-    } // ignore brush-by-zoom
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') { return; } // ignore brush-by-zoom
     const s = d3.event.selection || this.x2.range();
     this.x.domain(s.map(this.x2.invert, this.x2));
     this.focus.select('.area').attr('d', this.area);
@@ -163,6 +164,7 @@ export class BrushAndZoomComponent implements OnInit, OnChanges {
     this.svg.select('.zoom').call(this.zoom.transform, d3.zoomIdentity
       .scale(this.width / (s[1] - s[0]))
       .translate(-s[0], 0));
+
   }
 
   zoomed() {
