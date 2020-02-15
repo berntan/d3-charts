@@ -1,7 +1,9 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import * as d3 from 'd3';
-import { HttpClient } from '@angular/common/http';
+
+import { MoviesChartComponent } from '../movies-chart/movies-chart.component';
 
 // tslint:disable-next-line
 type Movie = {
@@ -28,6 +30,9 @@ type Movie = {
   vote_count: number,
 };
 
+// tslint:disable-next-line
+export type RevenueByGenre = { revenue: number; genre: string };
+
 const filterData = (data: Movie[]) => data.filter(d => {
   return d.release_year > 1999 &&
     d.release_year < 2010 &&
@@ -37,7 +42,8 @@ const filterData = (data: Movie[]) => data.filter(d => {
     d.title;
 });
 
-const prepareBarChartData = (data: Movie[]): any => {
+
+const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[]) => {
   /*
   d3.rollup(data, reducer, key)
   data: what we want to aggregate
@@ -73,6 +79,10 @@ const parseDate = d3.timeParse('%Y-%m-%d');
 })
 export class MoviesContainerComponent implements OnInit, AfterContentInit {
 
+  @ViewChild('revenueChart', {static: true}) chart: MoviesChartComponent;
+
+  private barChartData: RevenueByGenre[];
+
   constructor(private http: HttpClient) {
   }
 
@@ -93,6 +103,7 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
     const barChartData = prepareBarChartData(moviesClean).sort((a, b) => {
       return d3.descending(a.revenue, b.revenue);
     });
+    this.barChartData = barChartData;
     console.log(barChartData);
   }
 

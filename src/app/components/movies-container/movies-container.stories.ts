@@ -3,9 +3,8 @@ import { moduleMetadata } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
-import * as d3 from 'd3';
-
 import { MoviesContainerComponent } from './movies-container.component';
+import { MoviesChartComponent } from '../movies-chart/movies-chart.component';
 
 
 export default {
@@ -13,7 +12,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      declarations: [ MoviesContainerComponent ],
+      declarations: [ MoviesContainerComponent, MoviesChartComponent ],
       imports: [ CommonModule, HttpClientModule ]
     })
   ]

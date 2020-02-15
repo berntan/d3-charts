@@ -13,6 +13,7 @@ import { OrderDeliveryComponent } from './components/order-delivery/order-delive
 import { BrushAndZoomComponent } from './components/brush-and-zoom/brush-and-zoom.component';
 import { BrushAndZoomContainerComponent } from './components/brush-and-zoom-container/brush-and-zoom-container.component';
 import { MoviesContainerComponent } from './components/movies-container/movies-container.component';
+import { MoviesChartComponent } from './components/movies-chart/movies-chart.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MoviesContainerComponent } from './components/movies-container/movies-c
     OrderDeliveryComponent,
     BrushAndZoomComponent,
     BrushAndZoomContainerComponent,
-    MoviesContainerComponent
+    MoviesContainerComponent,
+    MoviesChartComponent
   ],
   imports: [
     BrowserModule,
