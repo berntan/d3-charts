@@ -81,7 +81,7 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
 
   @ViewChild('revenueChart', {static: true}) chart: MoviesChartComponent;
 
-  private barChartData: RevenueByGenre[];
+  private barChartData: RevenueByGenre[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -104,7 +104,6 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
       return d3.descending(a.revenue, b.revenue);
     });
     this.barChartData = barChartData;
-    console.log(barChartData);
   }
 
   typeConversion(d) {
