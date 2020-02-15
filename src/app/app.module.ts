@@ -12,6 +12,7 @@ import { AreaChartComponent } from './components/area-chart/area-chart.component
 import { OrderDeliveryComponent } from './components/order-delivery/order-delivery.component';
 import { BrushAndZoomComponent } from './components/brush-and-zoom/brush-and-zoom.component';
 import { BrushAndZoomContainerComponent } from './components/brush-and-zoom-container/brush-and-zoom-container.component';
+import { MoviesContainerComponent } from './components/movies-container/movies-container.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BrushAndZoomContainerComponent } from './components/brush-and-zoom-cont
     AreaChartComponent,
     OrderDeliveryComponent,
     BrushAndZoomComponent,
-    BrushAndZoomContainerComponent
+    BrushAndZoomContainerComponent,
+    MoviesContainerComponent
   ],
   imports: [
     BrowserModule,
