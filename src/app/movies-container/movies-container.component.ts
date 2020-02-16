@@ -70,6 +70,32 @@ const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[])
 
 const parseNA = (str: string): string => str === 'NA' ? undefined : str;
 const parseDate = d3.timeParse('%Y-%m-%d');
+const typeConversion = (d: any): Movie => {
+  const date = parseDate(d.release_date);
+  return {
+    budget: +d.budget,
+    genre: parseNA(d.genre),
+    genres: JSON.parse(d.genres).map(g => g.name),
+    homepage: parseNA(d.homepage),
+    id: +d.id,
+    imdb_id: parseNA(d.imdb_id),
+    original_language: parseNA(d.original_language),
+    overview: parseNA(d.overview),
+    popularity: +d.popularity,
+    poster_path: parseNA(d.poster_path),
+    production_countries: JSON.parse(d.production_countries),
+    release_date: date,
+    release_year: date.getFullYear(),
+    revenue: +d.revenue,
+    runtime: +d.runtime,
+    status: d.status,
+    tagline: parseNA(d.tagline),
+    title: parseNA(d.title),
+    video: d.video,
+    vote_average: +d.vote_average,
+    vote_count: +d.vote_count
+  };
+};
 
 
 @Component({
@@ -79,7 +105,7 @@ const parseDate = d3.timeParse('%Y-%m-%d');
 })
 export class MoviesContainerComponent implements OnInit, AfterContentInit {
 
-  @ViewChild('revenueChart', {static: true}) chart: MoviesChartComponent;
+  @ViewChild('revenueChart', { static: true }) chart: MoviesChartComponent;
 
   private barChartData: RevenueByGenre[] = [];
 
@@ -92,7 +118,7 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     this.http.get('assets/data/movies.csv', { responseType: 'text' }).subscribe(
       data => {
-        const csv = d3.csvParse(data, this.typeConversion.bind(this));
+        const csv = d3.csvParse(data, typeConversion);
         this.ready(csv as Movie[]);
       }
     );
@@ -104,33 +130,6 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
       return d3.descending(a.revenue, b.revenue);
     });
     this.barChartData = barChartData;
-  }
-
-  typeConversion(d) {
-    const date = parseDate(d.release_date);
-    return {
-      budget: +d.budget,
-      genre: parseNA(d.genre),
-      genres: JSON.parse(d.genres).map(g => g.name),
-      homepage: parseNA(d.homepage),
-      id: +d.id,
-      imdb_id: parseNA(d.imdb_id),
-      original_language: parseNA(d.original_language),
-      overview: parseNA(d.overview),
-      popularity: +d.popularity,
-      poster_path: parseNA(d.poster_path),
-      production_countries: JSON.parse(d.production_countries),
-      release_date: date,
-      release_year: date.getFullYear(),
-      revenue: +d.revenue,
-      runtime: +d.runtime,
-      status: d.status,
-      tagline: parseNA(d.tagline),
-      title: parseNA(d.title),
-      video: d.video,
-      vote_average: +d.vote_average,
-      vote_count: +d.vote_count
-    };
   }
 
 }
