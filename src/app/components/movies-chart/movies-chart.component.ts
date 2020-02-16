@@ -13,7 +13,7 @@ import * as d3 from 'd3';
 export class MoviesChartComponent implements OnInit, OnChanges {
   @Input() data: RevenueByGenre[];
 
-  readonly margin = { top: 40, right: 40, bottom: 40, left: 80 };
+  readonly margin = { top: 80, right: 40, bottom: 40, left: 80 };
   readonly width = 400 - this.margin.left - this.margin.right;
   readonly height = 500 - this.margin.top - this.margin.bottom;
   private readonly hostElement; // TODO: find what type this should be
@@ -38,6 +38,23 @@ export class MoviesChartComponent implements OnInit, OnChanges {
   }
 
   private drawChart(data: RevenueByGenre[]) {
+    // Draw header
+    const header = this.svg
+      .append('g')
+      .attr('class', 'bar-header')
+      .attr('transform', `translate(0, ${-this.margin.top * 0.6})`)
+      .append('text');
+
+    header.append('tspan').text('Total revenue by genre in $US');
+
+    header
+      .append('tspan')
+      .attr('x', 0) // Move left
+      .attr('dy', '1.5em') // move down with a little margin
+      .style('font-size', '0.8em') // smaller text
+      .style('fill', '#555')
+      .text('Films w/ budget and revenue figures, 2000-2009');
+
     // scales
     const xMax = d3.max(data, d => d.revenue);
 
@@ -52,6 +69,7 @@ export class MoviesChartComponent implements OnInit, OnChanges {
       .rangeRound([ 0, this.height ])
       .paddingInner(0.25);
 
+    // Draw base
     const bars = this.svg
       .selectAll('.bar')
       .data(data)
