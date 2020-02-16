@@ -14,6 +14,8 @@ import { BrushAndZoomComponent } from './brush-and-zoom/brush-and-zoom.component
 import { BrushAndZoomContainerComponent } from './brush-and-zoom-container/brush-and-zoom-container.component';
 import { MoviesContainerComponent } from './movies-container/movies-container.component';
 import { MoviesChartComponent } from './movies-chart/movies-chart.component';
+import { MoviesScatterComponent } from './movies-scatter/movies-scatter.component';
+import { MoviesScatterContainerComponent } from './movies-scatter-container/movies-scatter-container.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { MoviesChartComponent } from './movies-chart/movies-chart.component';
     BrushAndZoomComponent,
     BrushAndZoomContainerComponent,
     MoviesContainerComponent,
-    MoviesChartComponent
+    MoviesChartComponent,
+    MoviesScatterContainerComponent,
+    MoviesScatterComponent
   ],
   imports: [
     BrowserModule,
