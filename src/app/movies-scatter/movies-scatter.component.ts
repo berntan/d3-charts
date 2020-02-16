@@ -79,9 +79,9 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
       .style('fill-opacity', 0.7);
 
 
-    // draw axes
+    // draw x axis
     const xAxis = d3
-      .axisTop(xScale)
+      .axisBottom(xScale)
       .ticks(5)
       .tickFormat(formatTicks)
       .tickSizeInner(-this.height)
@@ -90,7 +90,21 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
     const xAxisDraw = this.svg
       .append('g')
       .attr('class', 'x axis-scatter')
+      .attr('transform', `translate(0, ${this.height})`)
       .call(xAxis);
+
+    // draw y axis
+    const yAxis = d3
+      .axisLeft(yScale)
+      .ticks(5)
+      .tickFormat(formatTicks)
+      .tickSizeInner(-this.height)
+      .tickSizeOuter(0);
+
+    const yAxisDraw = this.svg
+      .append('g')
+      .attr('class', 'x axis-scatter')
+      .call(yAxis);
 
   }
 
