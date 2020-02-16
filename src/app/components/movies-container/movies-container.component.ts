@@ -90,7 +90,7 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.http.get('/assets/data/movies.csv', { responseType: 'text' }).subscribe(
+    this.http.get('assets/data/movies.csv', { responseType: 'text' }).subscribe(
       data => {
         const csv = d3.csvParse(data, this.typeConversion.bind(this));
         this.ready(csv as Movie[]);

@@ -19,7 +19,7 @@ export class BrushAndZoomContainerComponent implements OnInit, AfterContentInit 
   }
 
   ngAfterContentInit(): void {
-    this.http.get('/assets/data/sp500.csv', { responseType: 'text' }).subscribe(
+    this.http.get('assets/data/sp500.csv', { responseType: 'text' }).subscribe(
       data => {
         this.csvData = data;
       }
