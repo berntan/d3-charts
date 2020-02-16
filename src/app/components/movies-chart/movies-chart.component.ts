@@ -13,7 +13,7 @@ import * as d3 from 'd3';
 export class MoviesChartComponent implements OnInit, OnChanges {
   @Input() data: RevenueByGenre[];
 
-  readonly margin = { top: 40, right: 40, bottom: 40, left: 40 };
+  readonly margin = { top: 40, right: 40, bottom: 40, left: 80 };
   readonly width = 400 - this.margin.left - this.margin.right;
   readonly height = 500 - this.margin.top - this.margin.bottom;
   private readonly hostElement; // TODO: find what type this should be
@@ -75,6 +75,16 @@ export class MoviesChartComponent implements OnInit, OnChanges {
       .attr('class', 'x axis')
       .call(xAxis);
 
+    const yAxis = d3
+      .axisLeft(yScale)
+      .tickSize(0);
+
+    const yAxisDraw = this.svg
+      .append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+      .selectAll('text')
+      .attr('dx', '-0.6em'); // Move text a little to the left
   }
 
   private formatTicks(d) {
