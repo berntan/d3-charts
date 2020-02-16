@@ -40,3 +40,10 @@ export const typeConversion = (d: any): Movie => {
     vote_count: +d.vote_count
   };
 };
+
+export const formatTicks: (d: number) => string = (d) => {
+  return d3.format('~s')(d)
+    .replace('M', ' mil')
+    .replace('G', ' bil')
+    .replace('T', ' tril');
+}

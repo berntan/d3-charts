@@ -1,21 +1,21 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
+import { Movie } from '../models/movie';
+import { formatTicks } from '../utils/movie.functions';
 
 const createDrawingArea = (width, height, margin, hostElement) => {
-  const svg = d3
+  return d3
     .select(hostElement)
     .append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-  return svg;
 };
 
 @Component({
   selector: 'app-movies-scatter',
-  templateUrl: './movies-scatter.component.html',
+  template: ``,
   styleUrls: [ './movies-scatter.component.scss' ]
 })
 export class MoviesScatterComponent implements OnInit, OnChanges {
@@ -37,8 +37,12 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data) {
       if (!this.svg) {
-        this.svg = createDrawingArea(this.width, this.height, this.margin, this.hostElement);
-
+        this.svg = createDrawingArea(
+          this.width,
+          this.height,
+          this.margin,
+          this.hostElement
+        );
       } else {
         this.data = changes.data.currentValue;
         this.drawChart(changes.data.currentValue);
@@ -46,7 +50,48 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
     }
   }
 
-  private drawChart(data: any) {
+  private drawChart(data: Movie[]) {
+
+    // scales
+    const xScale = d3
+      .scaleLinear()
+      .domain(d3.extent(data, d => d.budget))
+      .range([0, this.width]);
+
+    const yScale = d3
+      .scaleLinear()
+      .domain(d3.extent(data, d => d.revenue))
+      .range([this.height, 0]); // flip axis to plot from bottom and up
+
+    // draw scatter
+    const scatter = this.svg
+      .append('g')
+      .attr('class', 'scatter-points')
+      .selectAll('scatter')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('class', 'scatter')
+      .attr('cx', (d: Movie) => xScale(d.budget))
+      .attr('cy', (d: Movie) => yScale(d.revenue))
+      .attr('r', 3)
+      .style('fill', 'dodgerblue')
+      .style('fill-opacity', 0.7);
+
+
+    // draw axes
+    const xAxis = d3
+      .axisTop(xScale)
+      .ticks(5)
+      .tickFormat(formatTicks)
+      .tickSizeInner(-this.height)
+      .tickSizeOuter(0);
+
+    const xAxisDraw = this.svg
+      .append('g')
+      .attr('class', 'x axis-scatter')
+      .call(xAxis);
+
   }
 
 }

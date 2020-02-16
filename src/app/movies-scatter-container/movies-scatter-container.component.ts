@@ -10,29 +10,8 @@ import { filterData, typeConversion } from '../utils/movie.functions';
 // tslint:disable-next-line
 export type RevenueByGenre = { revenue: number; genre: string };
 
-const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[]) => {
-  /*
-  d3.rollup(data, reducer, key)
-  data: what we want to aggregate
-  reducer: reduce function that we use to aggregate or data with
-  key: what variable we group or data by
-   */
-
-  // const rolledUp = d3.rollup(
-  //   data,
-  //   v => d3.sum(v, leaf => leaf.revenue),
-  //   d => d.genre
-  // );
-
-  const dataMap = d3.nest<Movie, number>()
-    .key((d: Movie) => d.genre)
-    .rollup((v: Movie[]) => d3.sum(v, (leaf: Movie) => leaf.revenue))
-    .entries(data);
-
-  const dataArray = Array.from(dataMap, d => ({ genre: d.key, revenue: d.value }));
-
-  return dataArray;
-};
+const prepareScatterData: (x: Movie[]) => Movie[] = (data: Movie[]) =>
+  data.sort((a, b) => b.budget - a.budget).slice(0, 100);
 
 
 @Component({
@@ -42,9 +21,9 @@ const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[])
 })
 export class MoviesScatterContainerComponent implements OnInit, AfterContentInit {
 
-  @ViewChild('revenueChart', { static: true }) chart: MoviesChartComponent;
+  @ViewChild('scatterPlot', { static: true }) chart: MoviesChartComponent;
 
-  scatterData = [];
+  scatterData: Movie[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -63,9 +42,7 @@ export class MoviesScatterContainerComponent implements OnInit, AfterContentInit
 
   private ready(movies: Movie[]) {
     const moviesClean = filterData(movies);
-    this.scatterData = prepareBarChartData(moviesClean).sort((a, b) => {
-      return d3.descending(a.revenue, b.revenue);
-    });
+    this.scatterData = prepareScatterData(moviesClean);
   }
 
 }

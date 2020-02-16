@@ -47,3 +47,13 @@ text {
 .x line {
   stroke: white;
 }
+
+.axis-scatter .domain {
+  stroke: #bbb;
+}
+
+.axis-scatter .tick line {
+  stroke: #bbb;
+  stroke-width: 0.5;
+  stroke-dasharray: 4, 2;
+}

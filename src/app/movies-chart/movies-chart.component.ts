@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { RevenueByGenre } from '../movies-container/movies-container.component';
 import * as d3 from 'd3';
+import { formatTicks } from '../utils/movie.functions';
 
 
 @Component({
@@ -84,7 +85,7 @@ export class MoviesChartComponent implements OnInit, OnChanges {
     // Draw axes
     const xAxis = d3
       .axisTop(xScale)
-      .tickFormat(this.formatTicks)
+      .tickFormat(formatTicks)
       .tickSizeInner(-this.height)
       .tickSizeOuter(0);
 
@@ -103,13 +104,6 @@ export class MoviesChartComponent implements OnInit, OnChanges {
       .call(yAxis)
       .selectAll('text')
       .attr('dx', '-0.6em'); // Move text a little to the left
-  }
-
-  private formatTicks(d) {
-    return d3.format('~s')(d)
-      .replace('M', ' mil')
-      .replace('G', ' bil')
-      .replace('T', ' tril');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
