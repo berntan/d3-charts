@@ -63,6 +63,25 @@ export class MoviesChartComponent implements OnInit, OnChanges {
       .attr('height', yScale.bandwidth())
       .style('fill', 'dodgerblue');
 
+    // Draw axes
+    const xAxis = d3
+      .axisTop(xScale)
+      .tickFormat(this.formatTicks)
+      .tickSizeInner(-this.height)
+      .tickSizeOuter(0);
+
+    const xAxisDraw = this.svg
+      .append('g')
+      .attr('class', 'x axis')
+      .call(xAxis);
+
+  }
+
+  private formatTicks(d) {
+    return d3.format('~s')(d)
+      .replace('M', ' mil')
+      .replace('G', ' bil')
+      .replace('T', ' tril');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
