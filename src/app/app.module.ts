@@ -8,12 +8,12 @@ import { MatCardModule } from '@angular/material/card';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AreaChartComponent } from './components/area-chart/area-chart.component';
-import { OrderDeliveryComponent } from './components/order-delivery/order-delivery.component';
-import { BrushAndZoomComponent } from './components/brush-and-zoom/brush-and-zoom.component';
-import { BrushAndZoomContainerComponent } from './components/brush-and-zoom-container/brush-and-zoom-container.component';
-import { MoviesContainerComponent } from './components/movies-container/movies-container.component';
-import { MoviesChartComponent } from './components/movies-chart/movies-chart.component';
+import { AreaChartComponent } from './area-chart/area-chart.component';
+import { OrderDeliveryComponent } from './order-delivery/order-delivery.component';
+import { BrushAndZoomComponent } from './brush-and-zoom/brush-and-zoom.component';
+import { BrushAndZoomContainerComponent } from './brush-and-zoom-container/brush-and-zoom-container.component';
+import { MoviesContainerComponent } from './movies-container/movies-container.component';
+import { MoviesChartComponent } from './movies-chart/movies-chart.component';
 
 @NgModule({
   declarations: [

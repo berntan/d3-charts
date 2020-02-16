@@ -4,44 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 
 import { MoviesChartComponent } from '../movies-chart/movies-chart.component';
-
-// tslint:disable-next-line
-type Movie = {
-  budget: number,
-  genre: string,
-  genres: string[],
-  homepage: string,
-  id: number,
-  imdb_id: string,
-  original_language: string,
-  overview: string,
-  popularity: number,
-  poster_path: string,
-  production_countries: object[],
-  release_date: Date | null,
-  release_year: number,
-  revenue: number,
-  runtime: number,
-  status: string,
-  tagline: string | undefined,
-  title: string,
-  video: string,
-  vote_average: number,
-  vote_count: number,
-};
+import { Movie } from '../models/movie';
+import { filterData, typeConversion } from '../utils/movie.functions';
 
 // tslint:disable-next-line
 export type RevenueByGenre = { revenue: number; genre: string };
-
-const filterData = (data: Movie[]) => data.filter(d => {
-  return d.release_year > 1999 &&
-    d.release_year < 2010 &&
-    d.revenue > 0 &&
-    d.budget > 0 &&
-    d.genre &&
-    d.title;
-});
-
 
 const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[]) => {
   /*
@@ -68,36 +35,6 @@ const prepareBarChartData: (data: Movie[]) => RevenueByGenre[] = (data: Movie[])
 };
 
 
-const parseNA = (str: string): string => str === 'NA' ? undefined : str;
-const parseDate = d3.timeParse('%Y-%m-%d');
-const typeConversion = (d: any): Movie => {
-  const date = parseDate(d.release_date);
-  return {
-    budget: +d.budget,
-    genre: parseNA(d.genre),
-    genres: JSON.parse(d.genres).map(g => g.name),
-    homepage: parseNA(d.homepage),
-    id: +d.id,
-    imdb_id: parseNA(d.imdb_id),
-    original_language: parseNA(d.original_language),
-    overview: parseNA(d.overview),
-    popularity: +d.popularity,
-    poster_path: parseNA(d.poster_path),
-    production_countries: JSON.parse(d.production_countries),
-    release_date: date,
-    release_year: date.getFullYear(),
-    revenue: +d.revenue,
-    runtime: +d.runtime,
-    status: d.status,
-    tagline: parseNA(d.tagline),
-    title: parseNA(d.title),
-    video: d.video,
-    vote_average: +d.vote_average,
-    vote_count: +d.vote_count
-  };
-};
-
-
 @Component({
   selector: 'app-movies-container',
   templateUrl: './movies-container.component.html',
@@ -107,7 +44,7 @@ export class MoviesContainerComponent implements OnInit, AfterContentInit {
 
   @ViewChild('revenueChart', { static: true }) chart: MoviesChartComponent;
 
-  private barChartData: RevenueByGenre[] = [];
+  barChartData: RevenueByGenre[] = [];
 
   constructor(private http: HttpClient) {
   }
