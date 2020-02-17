@@ -87,11 +87,25 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
       .tickSizeInner(-this.height)
       .tickSizeOuter(0);
 
+    const addLabel = (axis: any, label: string, x: number) => {
+      axis
+        .selectAll('.tick:last-of-type text')
+        .clone()
+        .text(label)
+        .attr('x', x)
+        .style('text-anchor', 'start')
+        .style('font-weight', 'bold')
+        .style('fill', '#555');
+    };
+
     const xAxisDraw = this.svg
       .append('g')
       .attr('class', 'x axis-scatter')
       .attr('transform', `translate(0, ${this.height})`)
-      .call(xAxis);
+      .call(xAxis)
+      .call(addLabel, 'Budget', 25);
+
+    xAxisDraw.selectAll('text').attr('dy', '1em');
 
     // draw y axis
     const yAxis = d3
@@ -104,7 +118,8 @@ export class MoviesScatterComponent implements OnInit, OnChanges {
     const yAxisDraw = this.svg
       .append('g')
       .attr('class', 'x axis-scatter')
-      .call(yAxis);
+      .call(yAxis)
+      .call(addLabel, 'Revenue', 5);
 
   }
 
